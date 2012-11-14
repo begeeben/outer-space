@@ -8,7 +8,7 @@
         
         // DOM 
         // the drawing canvas
-        contex: this.element,
+        contex: this.element.getContext('2d'),
 
         // These options will be used as defaults
         options: {
