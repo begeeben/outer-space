@@ -14,6 +14,7 @@
 
         <link rel="stylesheet" href="css/normalize.css">
         <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/outer-space.css">
         <script src="js/vendor/modernizr-2.6.2.min.js"></script>
     </head>
     <body>
@@ -25,6 +26,8 @@
         <div id="page-container">        	
         	<canvas id="background"></canvas>
        		<img src="img/background-ufo.png" alt="" id="background-ufo">
+          <div id="game-title"></div>
+            <img src="img/pipe.png" alt="" id="pipe">
        		<div id="plate-container">
        			<div id="star-color"></div>
        			<div id="star-black"></div>
@@ -35,13 +38,12 @@
        			<div id="bar-pink"></div>
        			<img src="img/energy-plate.png" alt="" id="energy-plate">
        		</div>
-       		<img src="img/pipe.png" alt="" id="pipe">
         	<div id="config-container">
-        		<img src="" alt="" id="view-pays">
-        		<img src="" alt="" id="sound-off">
+            <div id="view-pays"></div>
+            <div id="sound-off"></div>
         	</div>
         	<div id="slot-container">
-        		<canvas id="slot"></canvas>
+            <canvas id="slot"></canvas>
         	</div>
         	<div id="balance"></div>
         	<div id="credits"></div>
@@ -49,10 +51,14 @@
         	<div id="dialog"></div>
         	<div id="winning-message"></div>
         	<div id="buttons-container">
-        		<img src="" alt="" id="bubble-select"><img src="" alt="" id="select-lines">
+            <div id="select-lines"></div>
+            <div id="set-per-lines"></div>
+            <div id="spin"></div>
+            <div id="max-bet"></div>
+        	<!-- 	<img src="" alt="" id="bubble-select"><img src="" alt="" id="select-lines">
         		<img src="" alt="" id="bubble-set"><img src="" alt="" id="set-per-lines">
         		<img src="" alt="" id="bubble-spin"><img src="" alt="" id="spin">
-        		<img src="" alt="" id="bubble-max"><img src="" alt="" id="max-bet">
+        		<img src="" alt="" id="bubble-max"><img src="" alt="" id="max-bet"> -->
         	</div>
         	<canvas id="characters"></canvas>
         </div>

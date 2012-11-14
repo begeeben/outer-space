@@ -1,0 +1,247 @@
+#page-container {
+	/*position: relative;*/
+
+}
+
+#background {
+	position: absolute;
+   background-color: #395975;
+    height: 720px;
+    width: 960px;
+}
+
+#background-ufo {
+position: absolute;
+top: 10px;
+left: 6px;
+}
+
+#game-title {
+  position: absolute;
+  background-image: url("../img/title.png");
+  width: 368px;
+  height: 59px;
+  top: 40px;
+  left: 293px;
+}
+
+#plate-container {
+position: absolute;
+background-color: #444423;
+top: 518px;
+left: 27px;
+-webkit-transform: rotate(-15deg);
+-moz-transform: rotate(-15deg);
+-o-transform: rotate(-15deg);
+-ms-transform:rotate(-15deg);
+}
+
+#star-color {
+position: absolute;
+}
+
+#star-black {
+position: absolute;
+background-color: #000000;
+height: 65px;
+width: 70px;
+top: 14px;
+left: 63px;
+}
+
+#bar-black {
+position: absolute;
+background-color: #000000;
+height: 78px;
+width: 143px;
+top: 85px;
+left: 33px;
+}
+
+#bar-orange {
+position: absolute;
+}
+
+#bar-blue {
+position: absolute;
+}
+
+#bar-yellow {
+position: absolute;
+}
+
+#bar-pink {
+position: absolute;
+}
+
+#energy-plate {
+	position: absolute;
+}
+
+#pipe {
+position: absolute;
+top:439px;
+left: 25px;
+}
+
+#config-container {
+  position: absolute;
+  top: 107px;
+  left: 204px;
+  width: 563px;
+  height: 30px;
+}
+
+#view-pays {
+  float: left;
+  background-image: url("../img/buttons/sprite-view-sound.png");
+  background-position: 0 0;
+  width: 140px;
+  height: 30px;
+}
+
+#view-pays:hover {
+  background-position: 0 -36px;
+}
+
+#sound-off {
+  float: right;
+  background-image: url("../img/buttons/sprite-view-sound.png");
+  background-position: -140px 0;
+  background-repeat: no-repeat;
+  width: 140px;
+  height: 30px;
+}
+
+#sound-off:hover {
+  background-position: -140px -36px;
+}
+
+#slot-container {
+  position: absolute;
+  top: 130px;
+  left: 167px;
+  width: 643px;
+  height: 430px;
+  background-image: url("../img/lightspeed-ring.png");
+  background-repeat: no-repeat;
+}
+
+#slot {
+  position: absolute;
+  width: 550px;
+  height: 340px;
+  background-color: #777777;
+  margin: auto;
+  top: 40px;
+  left: 39px;
+}
+
+#balance {
+
+}
+
+#credits {
+
+}
+
+#bet {
+  position: absolute;
+  width: 121px;
+  height: 89px;
+  background-image: url("../img/dog-dialog.png");
+  top: 320px;
+  left: 35px;
+}
+
+#dialog {
+  position: absolute;
+  width: 121px;
+  height: 89px;
+  background-image: url("../img/boy-dialog.png");
+  top: 280px;
+  left: 815px;
+}
+
+#winning-message {
+
+}
+
+#buttons-container {
+  position: absolute;
+  top: 543px;
+  left: 246px;
+  width: 602px;
+  height: 167px;
+}
+
+#bubble-select {
+
+}
+
+#select-lines {
+  position: absolute;
+  top: 20px;
+background-image: url("../img/buttons/bubble-select.png");
+width: 185px;
+height: 152px;
+}
+
+#select-lines:hover {
+background-image: url("../img/buttons/bubble-select-hover.png");
+}
+
+#bubble-set {
+
+}
+
+#set-per-lines {
+  position: absolute;
+  top: 35px;
+  left: 160px;
+background-image: url("../img/buttons/bubble-set.png");
+width: 150px;
+height: 131px;
+}
+
+#set-per-lines:hover {
+background-image: url("../img/buttons/bubble-set-hover.png");
+}
+
+#bubble-spin {
+
+}
+
+#spin {
+  position: absolute;
+  top: 20px;
+  left: 285px;
+background-image: url("../img/buttons/bubble-spin.png");
+width: 149px;
+height: 151px;
+}
+
+#spin:hover {
+background-image: url("../img/buttons/bubble-spin-hover.png");
+}
+
+#bubble-max {
+
+}
+
+#max-bet {
+  position: absolute;
+  top: 0px;
+  left: 425px;
+background-image: url("../img/buttons/bubble-max.png");
+width: 182px;
+height: 177px;
+}
+
+#max-bet:hover {
+background-image: url("../img/buttons/bubble-max-hover.png");
+}
+
+#characters {
+
+}
