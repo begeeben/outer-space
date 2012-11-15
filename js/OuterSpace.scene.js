@@ -1,3 +1,0 @@
-OuterSpace.scene = function () {
-
-};

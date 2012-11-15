@@ -4,25 +4,35 @@
     $.widget("OuterSpace.slot", {
 
         // Private members
-        
+        reels: [],
+        reelImg: null,
+        blurImg: null,
+        stopReelCounter: 0,
         
         // DOM 
         // the drawing canvas
-        contex: this.element.getContext('2d'),
+        context: null,
 
         // These options will be used as defaults
         options: {
             
-            reelUrl: null,
-            blurUrl: null,
-            spritePositions: [],
-            maxSpeed: [],
-            accelerateStep: []
+            reelUrl: "../img/icons.png",
+            blurUrl: "../img/icons-blur.png",
+            iconOffset: 100
+            // maxSpeed: [],
+            // accelerateStep: []
 
         },
 
         spin: function() {
+
+          var that = this;
           
+          for (reel in this.reels) {
+            reel.start(this._randomIcons());
+          }
+
+          this.setTimeout(that._stop, 5000);
 
         },
 
@@ -34,7 +44,7 @@
         _create: function() {
 
             this._initialize();
-            this._setOption("theme", this.options.theme);
+            // this._setOption("theme", this.options.theme);
 
         },
 
@@ -43,7 +53,7 @@
         _setOption: function(key, value) {
             switch(key) {
             case "theme":
-                this._setTheme(value)
+                // this._setTheme(value)
                 break;
             }
 
@@ -52,29 +62,47 @@
 
         // Bind DOM objects as jQuery objects
         _initialize: function() {
-            for(i = 0; i < 7; i++) {
-                this.element.append("<div id='slot" + i + "' class='slot'></div>");
-            }
+          var that = this;
 
-            for(j = 0; j < 7; j++) {
-                this.divDigits[j] = new Slot("#slot" + j, 70, 1 + j);
+          this.context = this.element.getContext('2d');
+          this.reelImg = new Image();
+          this.reelImg.src = this.options.reelUrl;
+          this.blurImg = new Image();
+          this.blurImg.src = this.options.blurUrl;
+
+            for (i=0; i<5; i++) {
+              reels[i] = new OuterSpace.reel(context, {
+                reelImg: that.reelImg,
+                blurImg: that.blurImg,
+                x: null,
+                y: 0,
+                width: null,
+                height: null,
+                speed: 1,
+                iconOffset: that.options.iconOffset
+              });
             }
         },
 
-        _getFinalPosition: function() {
-
+        _randomIcons: function() {
+          var icons = [];
+          for (i=0;i<3;i++) {
+            icons[i] = Math.floor(Math.random()*11);
+          }
+          return icons;
         },
 
-        _stopRolling: function(slot) {
-            if(this.options.theme === 1) {
-                slot[0].stop(Math.round((slot[1] + 1) * 126 * (this.options.scaledHeight / 182)));
-                // slot[0].stop(120);
-                // $(slot.el).css("background", "url('img/1_numbers.png) repeat-y scroll 0 126px transparent");
-            } else if(this.options.theme === 2) {
-                slot[0].stop(Math.round((slot[1] + 1) * 100 * (this.options.scaledHeight / 146)));
-            } else {
-                slot[0].stop(Math.round((slot[1] + 1) * 66 * (this.options.scaledHeight / 158)));
-            }
+        _stop: function() {
+          var that = this;
+
+          if (this.stopReelCounter<5) {
+            this.reels[this.stopReelCounter].stop();
+            this.stopReel += 1;
+            this.setTimeout(that._stop, 1000);
+          }
+          else {
+            this.stopReelCounter = 0;
+          }
         },
 
         destroy: function() {

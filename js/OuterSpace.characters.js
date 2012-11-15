@@ -1,3 +1,0 @@
-OuterSpace.characters = function () {
-
-};

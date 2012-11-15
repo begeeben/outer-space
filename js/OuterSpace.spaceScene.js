@@ -1,0 +1,3 @@
+OuterSpace.spaceScene = function () {
+
+};

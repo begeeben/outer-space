@@ -1,1 +1,1 @@
-OuterSpace = OuterSpace || {};
+var OuterSpace = OuterSpace || {};

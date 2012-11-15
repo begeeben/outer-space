@@ -1,11 +1,12 @@
 #page-container {
 	/*position: relative;*/
-
+   background-color: #395975;
+  width:960px;
+  height: 720px;
 }
 
 #background {
 	position: absolute;
-   background-color: #395975;
     height: 720px;
     width: 960px;
 }
@@ -86,6 +87,7 @@ left: 25px;
 
 #config-container {
   position: absolute;
+  z-index: 300;
   top: 107px;
   left: 204px;
   width: 563px;
@@ -131,7 +133,7 @@ left: 25px;
   position: absolute;
   width: 550px;
   height: 340px;
-  background-color: #777777;
+  /*background-color: #777777;*/
   margin: auto;
   top: 40px;
   left: 39px;
@@ -169,6 +171,7 @@ left: 25px;
 
 #buttons-container {
   position: absolute;
+  z-index: 200;
   top: 543px;
   left: 246px;
   width: 602px;
@@ -243,5 +246,9 @@ background-image: url("../img/buttons/bubble-max-hover.png");
 }
 
 #characters {
-
+  position: absolute;
+  width: 960px;
+  height: 720px;
+  /*background-color: #000000;*/
+  z-index: 100;
 }
