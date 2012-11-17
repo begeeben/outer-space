@@ -8,6 +8,7 @@
         reelImg: null,
         blurImg: null,
         stopReelCounter: 0,
+        isSpinning: false,
         
         // DOM 
         // the drawing canvas
@@ -16,9 +17,9 @@
         // These options will be used as defaults
         options: {
             
-            reelUrl: "../img/icons.png",
-            blurUrl: "../img/icons-blur.png",
-            iconOffset: 100
+            reelUrl: "img/icons.png",
+            blurUrl: "img/icons-blur.png",
+            iconOffset: 116
             // maxSpeed: [],
             // accelerateStep: []
 
@@ -26,14 +27,20 @@
 
         spin: function() {
 
+          if (!this.isSpinning) {
+
           var that = this;
+
+          this.isSpinning = true;
           
-          for (reel in this.reels) {
-            reel.start(this._randomIcons());
+          for (var i = 0; i<5 ; i++) {
+            this.reels[i].start(this._randomIcons());
           }
 
-          this.setTimeout(that._stop, 5000);
+          this._animate();
 
+          window.setTimeout(function () {that._stop();}, 3000);
+}
         },
 
         maxBet: function() {
@@ -64,44 +71,82 @@
         _initialize: function() {
           var that = this;
 
-          this.context = this.element.getContext('2d');
+          this.element[0].width = this.element[0].clientWidth;
+          this.element[0].height = this.element[0].clientHeight;
+          this.context = this.element[0].getContext('2d');
           this.reelImg = new Image();
           this.reelImg.src = this.options.reelUrl;
           this.blurImg = new Image();
           this.blurImg.src = this.options.blurUrl;
 
-            for (i=0; i<5; i++) {
-              reels[i] = new OuterSpace.reel(context, {
+          if (this.reelImg.complete) {
+            this._initializeReels();
+          }
+          else {
+            this.reelImg.onload = function () {
+              that._initializeReels();
+            };
+          }
+        },
+
+        _initializeReels: function() {
+          var that = this;
+
+          for (var i=4; i>=0; i--) {
+              // http://www.w3schools.com/tags/canvas_drawimage.asp
+              this.reels[i] = new OuterSpace.reel(this.context, {
                 reelImg: that.reelImg,
                 blurImg: that.blurImg,
-                x: null,
+                sx: 0,
+                sy: 0,
+                swidth: 126,
+                sheight: that.element[0].height,
+                x: 110 * i,
                 y: 0,
-                width: null,
-                height: null,
-                speed: 1,
-                iconOffset: that.options.iconOffset
+                width: 126,
+                height: that.element[0].height,
+                speed: 5 + i,
+                iconOffset: that.options.iconOffset,
+                icons: that._randomIcons()
               });
             }
         },
 
         _randomIcons: function() {
           var icons = [];
-          for (i=0;i<3;i++) {
+          for (var i=0;i<3;i++) {
             icons[i] = Math.floor(Math.random()*11);
           }
           return icons;
         },
 
+        _animate: function () {
+
+          if (this.isSpinning) {
+            requestAnimationFrame(this._animate.bind(this));
+
+            for (var i=4; i>=0; i--) {
+              if (this.reels[i].keepSpinning) {
+                this.reels[i].update();
+              }              
+            }
+
+          }  
+
+        },
+
         _stop: function() {
           var that = this;
 
-          if (this.stopReelCounter<5) {
             this.reels[this.stopReelCounter].stop();
-            this.stopReel += 1;
-            this.setTimeout(that._stop, 1000);
+            this.stopReelCounter += 1;
+
+          if (this.stopReelCounter<5) {
+            window.setTimeout(function(){that._stop();}, 1000);
           }
           else {
             this.stopReelCounter = 0;
+            this.isSpinning = false;
           }
         },
 

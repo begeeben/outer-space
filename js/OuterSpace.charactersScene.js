@@ -26,7 +26,10 @@ OuterSpace.charactersScene = function (container) {
   this.clock = new THREE.Clock();
   this.dog = null;
   this.boy = null;
+  this.pig = null;
   this.stats = null;
+
+  this.objects = [];
 
   this._init();
 };
@@ -84,6 +87,67 @@ OuterSpace.charactersScene.prototype = {
     this.dog.root.rotation.y = -0.5;
 
     this.scene.add(this.dog.root);
+
+
+    this.boy = new MANX.SlotMachine.BaseModel();
+    this.boy.scale = 1;
+    this.boy.controls = {
+      run: false,
+      jump: false
+    };
+    this.boy.loadParts({
+      baseUrl: "js/models/boy/",
+      body: "boy.js",
+      textures: ["boy.png"],
+      animations: {
+        stand: "stand"
+      }
+    });
+
+    this.boy.root.position.x = 60;
+    this.boy.root.position.y = -30;
+    this.boy.root.rotation.y = -2.5;
+    this.scene.add(this.boy.root);
+
+
+
+    // this.pig = new MANX.SlotMachine.BaseModel();
+    // this.pig.scale = 1;
+    // this.pig.controls = {
+    //   run: false,
+    //   jump: false
+    // };
+    // this.pig.loadParts({
+    //   baseUrl: "js/models/blackpig/",
+    //   body: "blackpig.js",
+    //   textures: ["BlackPig_diff.png"],
+    //   animations: {
+    //     stand: "stand"
+    //   }
+    // });
+
+    // this.pig.root.rotation.y = 2.5;
+
+    // this.scene.add(this.pig.root);
+
+    // for (i=0; i<4; i++) {
+    //    this.objects[i] = new MANX.SlotMachine.BaseModel();
+    // this.objects[i].scale = 1;
+    // this.objects[i].controls = {
+    //   run: false,
+    //   jump: false
+    // };
+    // this.objects[i].loadParts({
+    //   baseUrl: "js/models/boy/",
+    //   body: "boy.js",
+    //   textures: ["boy.png"],
+    //   animations: {
+    //     stand: "stand"
+    //   }
+    // });
+
+    // this.scene.add(this.objects[i].root);
+    // }
   },
 
   _animate: function () {
@@ -98,6 +162,11 @@ OuterSpace.charactersScene.prototype = {
   _render: function () {
     var delta = this.clock.getDelta();
     this.dog.update(delta);
+    this.boy.update(delta);
+    // this.pig.update(delta);
+    // for (i=0; i<4; i++) {      
+    //   this.objects[i].update(delta);
+    // }
     this.renderer.render(this.scene, this.camera);
   },
 
