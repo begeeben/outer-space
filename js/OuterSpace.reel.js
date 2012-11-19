@@ -19,7 +19,9 @@ OuterSpace.reel = function (context, options) {
   this.keepSpinning = false;
   this.spinningPosition = this.reelImg.height - 3 * this.iconOffset;
 
-  this.scaledSize = 0;  // for icon scaling animation
+  this.keepAnimating = false;
+  this.scale = 1;  // for icon scaling animation
+  this.scaleStep = 0;
   this.angle = 0;       // for icon rotating animaiton
 
   this._initialize();
@@ -75,43 +77,74 @@ OuterSpace.reel.prototype.update = function () {
   }
 };
 
-OuterSpace.reel.prototype.scale = function (iconPosition) {
-  if (this.scaledSize < 10) {
-
-    // this._clearBackground();
-
-    this.scaledSize += 2;
+OuterSpace.reel.prototype.enlarge = function (iconPosition) {
+  this.scaleStep += 0.1;
+  this.scale = 1 + Math.sin(this.scaleStep);
+  if (this.scale > 1) {
+    this.keepAnimating = true;
   }
   else {
-    this.scaledSize -= 2;
+    this.scale = 1;
+    this.scaleStep = 0;
+    this.keepAnimating = false;
   }
-  this.context.drawImage(this.reelImg, this.sx, this.currentIcons[iconPosition] * this.iconOffset, this.swidth, this.iconOffset, this.x - this.scaledSize, this.y + this.iconOffset * iconPosition - this.scaledSize * (this.iconOffset/this.width), this.width + this.scaledSize * 2, this.iconOffset + this.scaledSize * 2 * (this.iconOffset/this.width));
+  if (this.keepAnimating) {
+    this._clearBackground();
+    for (var i = 0; i<3; i++) {
+      if (i !== iconPosition) {
+        this.context.drawImage(this.reelImg, this.sx, this.currentIcons[i] * this.iconOffset, this.swidth, this.iconOffset, this.x, this.y + this.iconOffset * (2-i), this.width, this.iconOffset);
+      }
+    }
+    this._drawScaledImg(this.reelImg, this.sx, this.currentIcons[iconPosition] * this.iconOffset, this.swidth, this.iconOffset, this.x, this.y + this.iconOffset * (2-iconPosition), this.width, this.iconOffset, this.scale);
+  }
+};
+
+OuterSpace.reel.prototype._drawScaledImg = function (image, sx, sy, swidth, sheight, x, y, width, height, scale) {
+  // save the current co-ordinate system
+  // before we screw with it
+  this.context.save();
+  // move to the middle of where we want to draw our image
+  this.context.translate(x + swidth/2, y + sheight/2);
+  // draw it up and to the left by half the width
+  // and height of the image
+  this.context.drawImage(image, sx, sy, swidth, sheight, -(swidth/2) * scale, -(sheight/2) * scale, width * scale, height * scale);
+  // and restore the co-ords to how they were when we began
+  this.context.restore(); 
 };
 
 OuterSpace.reel.prototype.rotate = function (iconPosition) {
-  this._clearBackground();
-  for (var i = 0; i<3; i++) {
-    if (i !== iconPosition) {
-      this.context.drawImage(this.reelImg, this.sx, this.currentIcons[i] * this.iconOffset, this.swidth, this.iconOffset, this.x, this.y + this.iconOffset * (2-i), this.width, this.iconOffset);
-    }
+  if (this.angle !== 360) {
+    this.keepAnimating = true;
   }
-  this.angle += 10;
-  this._drawRotatedImg(this.reelImg, this.sx, this.currentIcons[iconPosition] * this.iconOffset, this.swidth, this.iconOffset, this.x, this.y + this.iconOffset * (2-iconPosition), this.width, this.iconOffset, this.angle);
+  else {
+    this.angle = 0;
+    this.keepAnimating = false;
+  }
+  if (this.keepAnimating) {
+    this._clearBackground();
+    for (var i = 0; i<3; i++) {
+      if (i !== iconPosition) {
+        this.context.drawImage(this.reelImg, this.sx, this.currentIcons[i] * this.iconOffset, this.swidth, this.iconOffset, this.x, this.y + this.iconOffset * (2-i), this.width, this.iconOffset);
+      }
+    }
+    this.angle += 10;
+    this._drawRotatedImg(this.reelImg, this.sx, this.currentIcons[iconPosition] * this.iconOffset, this.swidth, this.iconOffset, this.x, this.y + this.iconOffset * (2-iconPosition), this.width, this.iconOffset, this.angle);
+  }
 };
 
 OuterSpace.reel.prototype._drawRotatedImg = function (image, sx, sy, swidth, sheight, x, y, width, height, angle) {
-// save the current co-ordinate system
-// before we screw with it
+  // save the current co-ordinate system
+  // before we screw with it
   this.context.save();
-// move to the middle of where we want to draw our image
+  // move to the middle of where we want to draw our image
   this.context.translate(x + swidth/2, y + sheight/2);
-// rotate around that point, converting our
-// angle from degrees to radians
+  // rotate around that point, converting our
+  // angle from degrees to radians
   this.context.rotate(angle * Math.PI/180);
-// draw it up and to the left by half the width
-// and height of the image
+  // draw it up and to the left by half the width
+  // and height of the image
   this.context.drawImage(image, sx, sy, swidth, sheight, -(swidth/2), -(sheight/2), width, height);
-// and restore the co-ords to how they were when we began
+  // and restore the co-ords to how they were when we began
   this.context.restore(); 
 };
 

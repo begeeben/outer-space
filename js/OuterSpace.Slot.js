@@ -9,7 +9,7 @@
         blurImg: null,
         stopReelCounter: 0,
         isSpinning: false,
-        isWinning: false,   // is playing winning animation
+        isAnimating: false,   // is playing winning animation
         icons: [],
         winningLines: [],
         
@@ -170,17 +170,79 @@
         },
 
         _checkResult: function() {
-          this.isWinning = true;
-          this._animateWins();
+          var that = this;
+          this.isAnimating = true;
+
+          this.element.queue("win", function(){
+            that._animateWin([
+            {position: 0, win: true},
+            {position: 0, win: true},
+            {position: 0, win: true},
+            {position: 0, win: false},
+            {position: 0, win: false}
+            ], "rotate");
+          });
+
+          this.element.queue("win", function(){
+            that._animateWin([
+              {position: 2, win: false},
+              {position: 2, win: false},
+              {position: 2, win: true},
+              {position: 2, win: true},
+              {position: 2, win: true}
+              ], "rotate");
+          });
+
+          this.element.queue("win", function(){
+            that._animateWin([
+              {position: 1, win: true},
+              {position: 1, win: true},
+              {position: 1, win: true},
+              {position: 1, win: true},
+              {position: 1, win: true}
+              ], "enlarge");
+          });
+
+          this.element.dequeue("win");
         },
 
-        _animateWins: function() {
-          requestAnimationFrame(this._animateWins.bind(this));
-          this.reels[0].rotate(0);
-          this.reels[1].rotate(0);
-          this.reels[2].rotate(0);
-          this.reels[3].drawResult();
-          this.reels[4].drawResult();
+        _animateWin: function(line, type) {
+          if (this.isAnimating) {
+            requestAnimationFrame(this._animateWin.bind(this, line, type));
+            // draw satic icons first
+            for (var i = 0; i<5; i++) {
+              if (!line[i].win) {
+                this.reels[i].drawResult();
+              }
+            }
+            // draw animated icons
+            for (i = 0; i<5; i++) {
+              if (line[i].win) {
+                // this should be moved out of the loop
+                switch (type) {
+                  case "enlarge":
+                    this.reels[i].enlarge(line[i].position);
+                    break;
+                  case "rotate":
+                    this.reels[i].rotate(line[i].position);
+                    break;
+                }
+              }
+            }
+
+            if (!(this.reels[0].keepAnimating || this.reels[1].keepAnimating || this.reels[2].keepAnimating)) {
+              this.isAnimating = false;
+            }
+          }
+          else {
+            for (var i = 0; i<5; i++) {
+              this.reels[i].drawResult();
+            }
+            if (this.element.queue("win").length > 0) {
+              this.isAnimating = true;
+              this.element.dequeue("win");
+            }
+          }
         },
 
         destroy: function() {
