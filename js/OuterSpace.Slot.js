@@ -9,6 +9,9 @@
         blurImg: null,
         stopReelCounter: 0,
         isSpinning: false,
+        isWinning: false,   // is playing winning animation
+        icons: [],
+        winningLines: [],
         
         // DOM 
         // the drawing canvas
@@ -25,22 +28,37 @@
 
         },
 
-        spin: function() {
+        testSpin: function() {
+          var icons = [];
 
-          if (!this.isSpinning) {
+          for (var i = 0; i<5; i++) {
+            icons[i] = this._randomIcons();
+          }
+
+          this.spin(icons);
+        },
+
+        testWins: function() {
+          this.spin([[2,5,8],[2,5,10],[2,5,3],[6,5,3],[9,5,3]]);
+        },
+
+        spin: function(icons) {
+
+          if (!(this.isSpinning && this.isWinning)) {
 
           var that = this;
 
           this.isSpinning = true;
+          this.icons = icons;
           
           for (var i = 0; i<5 ; i++) {
-            this.reels[i].start(this._randomIcons());
+            this.reels[i].start(this.icons[i]);
           }
 
           this._animate();
 
           window.setTimeout(function () {that._stop();}, 3000);
-}
+          }
         },
 
         maxBet: function() {
@@ -147,7 +165,22 @@
           else {
             this.stopReelCounter = 0;
             this.isSpinning = false;
+            this._checkResult();
           }
+        },
+
+        _checkResult: function() {
+          this.isWinning = true;
+          this._animateWins();
+        },
+
+        _animateWins: function() {
+          requestAnimationFrame(this._animateWins.bind(this));
+          this.reels[0].rotate(0);
+          this.reels[1].rotate(0);
+          this.reels[2].rotate(0);
+          this.reels[3].drawResult();
+          this.reels[4].drawResult();
         },
 
         destroy: function() {

@@ -19,9 +19,11 @@ OuterSpace.reel = function (context, options) {
   this.keepSpinning = false;
   this.spinningPosition = this.reelImg.height - 3 * this.iconOffset;
 
+  this.scaledSize = 0;  // for icon scaling animation
+  this.angle = 0;       // for icon rotating animaiton
+
   this._initialize();
 
-  alert(this.currentIcons);
 };
 
 OuterSpace.reel.prototype.start = function (icons) {
@@ -33,7 +35,7 @@ OuterSpace.reel.prototype.start = function (icons) {
 
 OuterSpace.reel.prototype.stop = function () {
   this.keepSpinning = false;
-  this._animateResult();
+  this.drawResult();
   this.currentIcons = this.nextIcons;
 };
 
@@ -73,21 +75,47 @@ OuterSpace.reel.prototype.update = function () {
   }
 };
 
-// OuterSpace.reel.prototype._animate = function () {
-//   if (this.keepRolling) {
-//     requestAnimationFrame(this._animate.bind(this));
+OuterSpace.reel.prototype.scale = function (iconPosition) {
+  if (this.scaledSize < 10) {
 
-//     this._clearBackground();
+    // this._clearBackground();
 
-//     this.rollingPosition += this.step * this.speed;
-//     if (this.rollingPosition >= this.blurImg.height) {
-//       this.rollingPosition -= this.blurImg.height;
-//     }
-//     this._draw(this.blurImg, this.rollingPosition);
-//   }
-// };
+    this.scaledSize += 2;
+  }
+  else {
+    this.scaledSize -= 2;
+  }
+  this.context.drawImage(this.reelImg, this.sx, this.currentIcons[iconPosition] * this.iconOffset, this.swidth, this.iconOffset, this.x - this.scaledSize, this.y + this.iconOffset * iconPosition - this.scaledSize * (this.iconOffset/this.width), this.width + this.scaledSize * 2, this.iconOffset + this.scaledSize * 2 * (this.iconOffset/this.width));
+};
 
-OuterSpace.reel.prototype._animateResult = function () {  
+OuterSpace.reel.prototype.rotate = function (iconPosition) {
+  this._clearBackground();
+  for (var i = 0; i<3; i++) {
+    if (i !== iconPosition) {
+      this.context.drawImage(this.reelImg, this.sx, this.currentIcons[i] * this.iconOffset, this.swidth, this.iconOffset, this.x, this.y + this.iconOffset * (2-i), this.width, this.iconOffset);
+    }
+  }
+  this.angle += 10;
+  this._drawRotatedImg(this.reelImg, this.sx, this.currentIcons[iconPosition] * this.iconOffset, this.swidth, this.iconOffset, this.x, this.y + this.iconOffset * (2-iconPosition), this.width, this.iconOffset, this.angle);
+};
+
+OuterSpace.reel.prototype._drawRotatedImg = function (image, sx, sy, swidth, sheight, x, y, width, height, angle) {
+// save the current co-ordinate system
+// before we screw with it
+  this.context.save();
+// move to the middle of where we want to draw our image
+  this.context.translate(x + swidth/2, y + sheight/2);
+// rotate around that point, converting our
+// angle from degrees to radians
+  this.context.rotate(angle * Math.PI/180);
+// draw it up and to the left by half the width
+// and height of the image
+  this.context.drawImage(image, sx, sy, swidth, sheight, -(swidth/2), -(sheight/2), width, height);
+// and restore the co-ords to how they were when we began
+  this.context.restore(); 
+};
+
+OuterSpace.reel.prototype.drawResult = function () {  
   this._clearBackground();
   this.context.drawImage(this.reelImg, this.sx, this.nextIcons[0] * this.iconOffset, this.swidth, this.iconOffset, this.x, this.y + this.iconOffset * 2, this.width, this.iconOffset);
   this.context.drawImage(this.reelImg, this.sx, this.nextIcons[1] * this.iconOffset, this.swidth, this.iconOffset, this.x, this.y + this.iconOffset, this.width, this.iconOffset);

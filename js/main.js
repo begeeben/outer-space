@@ -2,9 +2,13 @@ $(document).ready(function(){
 	$("#slot").slot();
 
   $("#spin").on("click", function(event){
-    $("#slot").slot("spin");
+    $("#slot").slot("testSpin");
   });
 
-  var characters = new OuterSpace.charactersScene(document.getElementById("characters"));
+  $("#max-bet").on("click", function(event){
+    $("#slot").slot("testWins");
+  });
+
+  // var characters = new OuterSpace.charactersScene(document.getElementById("characters"));
 
 });
