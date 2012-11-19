@@ -10,8 +10,14 @@
         stopReelCounter: 0,
         isSpinning: false,
         isAnimating: false,   // is playing winning animation
+        isResultChecked: false,
         icons: [],
-        winningLines: [],
+        // this.lines[lineNo][reelNo]
+        lines: [
+          [ 1,1,1,1,1 ],
+          [ 2,2,2,2,2 ],
+          [ 0,0,0,0,0 ]
+          ],
         
         // DOM 
         // the drawing canvas
@@ -44,20 +50,22 @@
 
         spin: function(icons) {
 
-          if (!(this.isSpinning && this.isWinning)) {
+          if (!(this.isSpinning || this.isAnimating)) {
 
-          var that = this;
+            var that = this;
 
-          this.isSpinning = true;
-          this.icons = icons;
-          
-          for (var i = 0; i<5 ; i++) {
-            this.reels[i].start(this.icons[i]);
-          }
+            this.isSpinning = true;
+            this.isResultChecked = false;
+            this.icons = icons;
+            
+            for (var i = 0; i<5 ; i++) {
+              this.reels[i].start(this.icons[i]);
+            }
 
-          this._animate();
+            this._animate();
 
-          window.setTimeout(function () {that._stop();}, 3000);
+            window.setTimeout(function () {that._stop();}, 3000);
+
           }
         },
 
@@ -138,6 +146,16 @@
           return icons;
         },
 
+        _randomAnimationType: function() {
+          var type = Math.floor(Math.random()*2);
+          switch (type) {
+            case 0:
+              return "rotate";
+            case 1:
+              return "enlarge";
+          }
+        },
+
         _animate: function () {
 
           if (this.isSpinning) {
@@ -150,7 +168,6 @@
             }
 
           }  
-
         },
 
         _stop: function() {
@@ -164,8 +181,26 @@
           }
           else {
             this.stopReelCounter = 0;
+            this.isAnimating = true;
             this.isSpinning = false;
+
             this._checkResult();
+            this._animateResult();         
+          }
+        },
+
+        _animateResult: function () {
+          // if result checked
+          if (this.isResultChecked) {
+            if (this.element.queue("win").length > 0) {
+              this.element.dequeue("win");
+            }
+            else {
+              this.isAnimating = false;
+            }
+          }
+          else {
+            this._animateResult();
           }
         },
 
@@ -173,37 +208,43 @@
           var that = this;
           this.isAnimating = true;
 
-          this.element.queue("win", function(){
-            that._animateWin([
-            {position: 0, win: true},
-            {position: 0, win: true},
-            {position: 0, win: true},
-            {position: 0, win: false},
-            {position: 0, win: false}
-            ], "rotate");
-          });
+          /* check if this bottlenecks performance in the future - 2012.11.19 */
+          // var winLines = [];
+          // for each line
+          for (var i=0; i<3; i++) {
+            // for each reel
+            var matchedCounter;
+            for (var j=0; j<5; j++) {
+              var line = [{position: this.lines[i][0], win: false},
+                        {position: this.lines[i][1], win: false},
+                        {position: this.lines[i][2], win: false},
+                        {position: this.lines[i][3], win: false},
+                        {position: this.lines[i][4], win: false}];
+              line[j].win = true;
+              matchedCounter = 1;
+              for (var k=j+1; k<5; k++) {
+                if (this.icons[j][this.lines[i][j]] === this.icons[k][this.lines[i][k]]) {
+                  line[k].win = true;
+                  matchedCounter += 1;
+                }
+              }
+              if (matchedCounter>2) {
+                // winLines.push(line);
+                break;
+              }
+            }
 
-          this.element.queue("win", function(){
-            that._animateWin([
-              {position: 2, win: false},
-              {position: 2, win: false},
-              {position: 2, win: true},
-              {position: 2, win: true},
-              {position: 2, win: true}
-              ], "rotate");
-          });
+            if (matchedCounter>2) {
+              (function(line){
+                that.element.queue("win", function(){
+                  that._animateWin(line, that._randomAnimationType());
+                });
+              })(line);
+            }
+          }
 
-          this.element.queue("win", function(){
-            that._animateWin([
-              {position: 1, win: true},
-              {position: 1, win: true},
-              {position: 1, win: true},
-              {position: 1, win: true},
-              {position: 1, win: true}
-              ], "enlarge");
-          });
+          this.isResultChecked = true;
 
-          this.element.dequeue("win");
         },
 
         _animateWin: function(line, type) {

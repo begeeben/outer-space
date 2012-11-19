@@ -9,6 +9,6 @@ $(document).ready(function(){
     $("#slot").slot("testWins");
   });
 
-  // var characters = new OuterSpace.charactersScene(document.getElementById("characters"));
+  var characters = new OuterSpace.charactersScene(document.getElementById("characters"));
 
 });
