@@ -1,14 +1,14 @@
 #page-container {
 	/*position: relative;*/
-   background-color: #395975;
   width:960px;
   height: 720px;
 }
 
 #background {
 	position: absolute;
-    height: 720px;
-    width: 960px;
+  background-color: #000000;
+  height: 720px;
+  width: 960px;
 }
 
 #background-ufo {

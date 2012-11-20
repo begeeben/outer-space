@@ -9,6 +9,7 @@ $(document).ready(function(){
     $("#slot").slot("testWins");
   });
 
+  var space = new OuterSpace.spaceScene(document.getElementById("background"));
   var characters = new OuterSpace.charactersScene(document.getElementById("characters"));
 
 });
