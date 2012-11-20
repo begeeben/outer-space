@@ -236,8 +236,12 @@
 
             if (matchedCounter>2) {
               (function(line){
+                var type = that._randomAnimationType();
                 that.element.queue("win", function(){
-                  that._animateWin(line, that._randomAnimationType());
+                  that._animateWin(line, type);
+                });
+                that.element.queue("win", function(){
+                  that._animateWin(line, type);
                 });
               })(line);
             }
