@@ -84,12 +84,17 @@ OuterSpace.reel.prototype.enlarge = function (iconPosition) {
     this.keepAnimating = true;
   }
   else {
+    for (var i = 0; i<3; i++) {
+      
+      this.context.drawImage(this.reelImg, this.sx, this.currentIcons[i] * this.iconOffset, this.swidth, this.iconOffset, this.x, this.y + this.iconOffset * (2-i), this.width, this.iconOffset);
+
+    }
     this.scale = 1;
     this.scaleStep = 0;
     this.keepAnimating = false;
   }
   if (this.keepAnimating) {
-    this._clearBackground();
+    // this._clearBackground();
     for (var i = 0; i<3; i++) {
       if (i !== iconPosition) {
         this.context.drawImage(this.reelImg, this.sx, this.currentIcons[i] * this.iconOffset, this.swidth, this.iconOffset, this.x, this.y + this.iconOffset * (2-i), this.width, this.iconOffset);
@@ -118,13 +123,18 @@ OuterSpace.reel.prototype.rotate = function (iconPosition) {
   if (this.scaleStep < Math.PI * 2) {
     this.keepAnimating = true;
   }
-  else {
+  else {    
+    for (var i = 0; i<3; i++) {
+      
+      this.context.drawImage(this.reelImg, this.sx, this.currentIcons[i] * this.iconOffset, this.swidth, this.iconOffset, this.x, this.y + this.iconOffset * (2-i), this.width, this.iconOffset);
+
+    }
     this.angle = 0;
     this.scaleStep = 0;
     this.keepAnimating = false;
   }
   if (this.keepAnimating) {
-    this._clearBackground();
+    // this._clearBackground();
     for (var i = 0; i<3; i++) {
       if (i !== iconPosition) {
         this.context.drawImage(this.reelImg, this.sx, this.currentIcons[i] * this.iconOffset, this.swidth, this.iconOffset, this.x, this.y + this.iconOffset * (2-i), this.width, this.iconOffset);

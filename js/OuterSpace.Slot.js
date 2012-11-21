@@ -45,7 +45,7 @@
         },
 
         testWins: function() {
-          this.spin([[2,5,8],[2,5,10],[2,5,3],[6,5,3],[9,5,3]]);
+          this.spin([[2,5,8],[2,5,10],[0,5,3],[2,5,3],[9,5,3]]);
         },
 
         spin: function(icons) {
@@ -254,6 +254,8 @@
         _animateWin: function(line, type) {
           if (this.isAnimating) {
             requestAnimationFrame(this._animateWin.bind(this, line, type));
+            // clear canvas
+            this.context.clearRect(0,0, this.element[0].width, this.element[0].height);
             // draw satic icons first
             for (var i = 0; i<5; i++) {
               if (!line[i].win) {
