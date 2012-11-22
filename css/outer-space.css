@@ -139,6 +139,66 @@ left: 25px;
   left: 39px;
 }
 
+#win-animation {
+  position: absolute;
+  width: 295px;
+  height: 295px;
+  top: 65px;
+  left: 165px;
+  /*background-color: #000000;*/
+  /*background-image: url("../img/animation/dog.gif");*/
+  background-repeat: no-repeat;
+  display: none;
+}
+
+.hide {
+  display: none;
+}
+
+.icon0 {
+  background-image: url("../img/animation/dog.gif");
+}
+
+.icon1 {
+  /*background-image: url("../img/animation/dog.gif");*/
+}
+
+.icon2 {
+  /*background-image: url("../img/animation/dog.gif");*/
+}
+
+.icon3 {
+  background-image: url("../img/animation/chang-e.gif");
+}
+
+.icon4 {
+  /*background-image: url("../img/animation/dog.gif");*/
+}
+
+.icon5 {
+  background-image: url("../img/animation/martian.gif");
+}
+
+.icon6 {
+  /*background-image: url("../img/animation/dog.gif");*/
+}
+
+.icon7 {
+  background-image: url("../img/animation/rabbit.gif");
+}
+
+.icon8 {
+  /*background-image: url("../img/animation/dog.gif");*/
+}
+
+.icon9 {
+  /*background-image: url("../img/animation/dog.gif");*/
+}
+
+.icon10 {
+  /*background-image: url("../img/animation/dog.gif");*/
+}
+
 #balance {
 
 }

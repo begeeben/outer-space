@@ -16,19 +16,34 @@
         lines: [
           [ 1,1,1,1,1 ],
           [ 2,2,2,2,2 ],
-          [ 0,0,0,0,0 ]
+          [ 0,0,0,0,0 ],
+          [ 1,1,2,1,1 ],
+          [ 1,1,0,1,1 ],
+          [ 2,2,1,0,0 ],
+          [ 0,0,1,2,2 ],
+          [ 2,2,1,2,2 ],
+          [ 0,0,1,0,0 ],
+          [ 2,1,0,1,2 ],
+          [0,1,2,1,0],
+          [2,2,1,0,0],
+          [0,0,1,2,2]
           ],
+        linesBet: 1,
+        drawer: null,
         
         // DOM 
         // the drawing canvas
         context: null,
+        // div for gif animation
+        animationContainer: null,
 
         // These options will be used as defaults
         options: {
             
             reelUrl: "img/icons.png",
             blurUrl: "img/icons-blur.png",
-            iconOffset: 116
+            iconOffset: 116,
+            animationContainer: "win-animation"
             // maxSpeed: [],
             // accelerateStep: []
 
@@ -41,11 +56,14 @@
             icons[i] = this._randomIcons();
           }
 
+          this.linesBet = this.lines.length;
           this.spin(icons);
         },
 
         testWins: function() {
-          this.spin([[2,5,8],[2,5,10],[0,5,3],[2,5,3],[9,5,3]]);
+          this.linesBet = this.lines.length;
+          // this.spin([[0,5,8],[2,5,10],[0,5,3],[0,5,3],[9,5,3]]);
+          this.spin([[3,5,8],[2,5,10],[0,5,3],[0,5,3],[0,5,3]]);
         },
 
         spin: function(icons) {
@@ -62,7 +80,12 @@
               this.reels[i].start(this.icons[i]);
             }
 
-            this._animate();
+            // draw selected lines
+            for (var j = 0; j<this.linesBet; j++) {
+              this.drawer.drawLine(this.lines[j]);
+            }
+
+            window.setTimeout(function () {that._animate();}, 500);
 
             window.setTimeout(function () {that._stop();}, 3000);
 
@@ -70,14 +93,26 @@
         },
 
         maxBet: function() {
-            
+          this.linesBet = this.lines.length;
+        },
+
+        increaseLine: function() {
+          if (this.linesBet<=this.lines.length) {
+            this.linesBet += 1;
+          }
+        },
+
+        decreaseLine: function() {
+          if (this.linesBet>1) {
+            this.linesBet -= 1;
+          }
         },
 
         // Set up the widget
         _create: function() {
 
             this._initialize();
-            // this._setOption("theme", this.options.theme);
+            this._setOption("animationContainer", this.options.animationContainer);
 
         },
 
@@ -85,8 +120,8 @@
         // It's not called for the options passed in during widget creation
         _setOption: function(key, value) {
             switch(key) {
-            case "theme":
-                // this._setTheme(value)
+            case "animationContainer":
+                this.animationContainer = $("#" + value);
                 break;
             }
 
@@ -96,10 +131,13 @@
         // Bind DOM objects as jQuery objects
         _initialize: function() {
           var that = this;
-
           this.element[0].width = this.element[0].clientWidth;
           this.element[0].height = this.element[0].clientHeight;
           this.context = this.element[0].getContext('2d');
+          this.drawer = new OuterSpace.drawer(this.context, {
+            origin: { x: 55, y: 58},
+            offset: { x: 110, y: 116}
+          });
           this.reelImg = new Image();
           this.reelImg.src = this.options.reelUrl;
           this.blurImg = new Image();
@@ -211,9 +249,10 @@
           /* check if this bottlenecks performance in the future - 2012.11.19 */
           // var winLines = [];
           // for each line
-          for (var i=0; i<3; i++) {
+          for (var i=0; i<this.linesBet; i++) {
             // for each reel
             var matchedCounter;
+            var icon;
             for (var j=0; j<5; j++) {
               var line = [{position: this.lines[i][0], win: false},
                         {position: this.lines[i][1], win: false},
@@ -229,22 +268,24 @@
                 }
               }
               if (matchedCounter>2) {
-                // winLines.push(line);
+                icon = this.icons[j][this.lines[i][j]];
+                // queue winning animations
+                (function(line, icon){
+                  var type = that._randomAnimationType();
+                  that.element.queue("win", function(){
+                    that._animateWin(line, type);
+                  });
+                  that.element.queue("win", function(){
+                    that._animateWin(line, type);
+                  });
+                  that.element.queue("win", function(){
+                    that._showIconAnimation(icon);
+                  });
+                })(line, icon);
                 break;
               }
             }
 
-            if (matchedCounter>2) {
-              (function(line){
-                var type = that._randomAnimationType();
-                that.element.queue("win", function(){
-                  that._animateWin(line, type);
-                });
-                that.element.queue("win", function(){
-                  that._animateWin(line, type);
-                });
-              })(line);
-            }
           }
 
           this.isResultChecked = true;
@@ -256,6 +297,12 @@
             requestAnimationFrame(this._animateWin.bind(this, line, type));
             // clear canvas
             this.context.clearRect(0,0, this.element[0].width, this.element[0].height);
+            // draw line
+            var l = [];
+            for (var j=0; j<5; j++) {
+              l[j] = 2 - line[j].position;
+            }
+            this.drawer.drawLine(l);
             // draw satic icons first
             for (var i = 0; i<5; i++) {
               if (!line[i].win) {
@@ -282,6 +329,8 @@
             }
           }
           else {
+            // clear canvas
+            this.context.clearRect(0,0, this.element[0].width, this.element[0].height);
             for (var i = 0; i<5; i++) {
               this.reels[i].drawResult();
             }
@@ -290,6 +339,21 @@
               this.element.dequeue("win");
             }
           }
+        },
+
+        _showIconAnimation: function(icon) {
+          var that = this;
+          this.animationContainer.addClass("icon" + icon)
+            .show()
+            .delay(1500)
+            .hide(500, function(){
+              that.animationContainer.removeClass("icon" + icon);
+              that.element.dequeue("win");
+
+            if (that.element.queue("win").length < 1) {
+              that.isAnimating = false;
+            }
+          });
         },
 
         destroy: function() {

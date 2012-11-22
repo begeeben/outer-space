@@ -37,8 +37,9 @@ OuterSpace.reel.prototype.start = function (icons) {
 
 OuterSpace.reel.prototype.stop = function () {
   this.keepSpinning = false;
-  this.drawResult();
   this.currentIcons = this.nextIcons;
+  this._clearBackground();
+  this.drawResult();
 };
 
 OuterSpace.reel.prototype.speedUp = function () {
@@ -161,10 +162,10 @@ OuterSpace.reel.prototype._drawRotatedImg = function (image, sx, sy, swidth, she
 };
 
 OuterSpace.reel.prototype.drawResult = function () {  
-  this._clearBackground();
-  this.context.drawImage(this.reelImg, this.sx, this.nextIcons[0] * this.iconOffset, this.swidth, this.iconOffset, this.x, this.y + this.iconOffset * 2, this.width, this.iconOffset);
-  this.context.drawImage(this.reelImg, this.sx, this.nextIcons[1] * this.iconOffset, this.swidth, this.iconOffset, this.x, this.y + this.iconOffset, this.width, this.iconOffset);
-  this.context.drawImage(this.reelImg, this.sx, this.nextIcons[2] * this.iconOffset, this.swidth, this.iconOffset, this.x, this.y, this.width, this.iconOffset);
+  // this._clearBackground();
+  this.context.drawImage(this.reelImg, this.sx, this.currentIcons[0] * this.iconOffset, this.swidth, this.iconOffset, this.x, this.y + this.iconOffset * 2, this.width, this.iconOffset);
+  this.context.drawImage(this.reelImg, this.sx, this.currentIcons[1] * this.iconOffset, this.swidth, this.iconOffset, this.x, this.y + this.iconOffset, this.width, this.iconOffset);
+  this.context.drawImage(this.reelImg, this.sx, this.currentIcons[2] * this.iconOffset, this.swidth, this.iconOffset, this.x, this.y, this.width, this.iconOffset);
 };
 
 OuterSpace.reel.prototype._clearBackground = function () {
