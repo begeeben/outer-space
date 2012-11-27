@@ -2,11 +2,11 @@
  * @author begeeben
  */
 
-var MANX = MANX || {};
+// var MANX = MANX || {};
 
-MANX.SlotMachine = {};
+// MANX.SlotMachine = {};
 
-MANX.SlotMachine.BaseModel = function() {
+OuterSpace.baseModel = function() {
 
 	var scope = this;
 

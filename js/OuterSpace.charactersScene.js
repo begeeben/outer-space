@@ -64,7 +64,7 @@ OuterSpace.charactersScene.prototype = {
   },
 
   _addObjects: function () {
-    this.dog = new MANX.SlotMachine.BaseModel();
+    this.dog = new OuterSpace.baseModel();
     this.dog.scale = 1;
     this.dog.controls = {
       run: false,
@@ -89,7 +89,7 @@ OuterSpace.charactersScene.prototype = {
     this.scene.add(this.dog.root);
 
 
-    this.boy = new MANX.SlotMachine.BaseModel();
+    this.boy = new OuterSpace.baseModel();
     this.boy.scale = 1;
     this.boy.controls = {
       run: false,

@@ -14,7 +14,7 @@ $(document).ready(function(){
 
   var audio = new OuterSpace.audio("audio/", eventAggregator);
   // var space = new OuterSpace.spaceScene(document.getElementById("background"));
-  // var characters = new OuterSpace.charactersScene(document.getElementById("characters"));
+  var characters = new OuterSpace.charactersScene(document.getElementById("characters"));
 
   eventAggregator.trigger("game:ready");
 
