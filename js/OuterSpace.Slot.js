@@ -30,6 +30,8 @@
           ],
         linesBet: 1,
         drawer: null,
+        winningVideo: null,
+        eventAggregator: null,
         
         // DOM 
         // the drawing canvas
@@ -43,7 +45,9 @@
             reelUrl: "img/icons.png",
             blurUrl: "img/icons-blur.png",
             iconOffset: 116,
-            animationContainer: "win-animation"
+            animationContainer: "win-animation",
+            winningVideo: "win-video",
+            eventAggregator: null
             // maxSpeed: [],
             // accelerateStep: []
 
@@ -69,6 +73,9 @@
         spin: function(icons) {
 
           if (!(this.isSpinning || this.isAnimating)) {
+            eventAggregator.trigger("slot:spin");
+            // this.eventAggregator.trigger("slot:spin");
+            // this.options.eventAggregator.trigger("slot:spin");
 
             var that = this;
 
@@ -113,6 +120,8 @@
 
             this._initialize();
             this._setOption("animationContainer", this.options.animationContainer);
+            this._setOption("winningVideo", this.options.winningVideo);
+            // this._setOption("eventAggregator", this.options.eventAggregator);
 
         },
 
@@ -121,8 +130,14 @@
         _setOption: function(key, value) {
             switch(key) {
             case "animationContainer":
-                this.animationContainer = $("#" + value);
-                break;
+              this.animationContainer = $("#" + value);
+              break;
+            case "winningVideo":
+              this.winningVideo = document.getElementById(value);
+              break;
+            // case "eventAggregator":
+            //   this.eventAggregator = this.options.eventAggregator;
+            //   break;
             }
 
             $.Widget.prototype._setOption.apply(this, arguments);
@@ -221,7 +236,7 @@
             this.stopReelCounter = 0;
             this.isAnimating = true;
             this.isSpinning = false;
-
+            eventAggregator.trigger("slot:stop");
             this._checkResult();
             this._animateResult();         
           }
@@ -343,6 +358,9 @@
 
         _showIconAnimation: function(icon) {
           var that = this;
+          if(this.winningVideo) {
+            this.winningVideo.play();
+          }
           this.animationContainer.addClass("icon" + icon)
             .show()
             .delay(1500)

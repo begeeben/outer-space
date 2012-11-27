@@ -1,5 +1,8 @@
+var eventAggregator = _.extend({}, Backbone.Events);
+
 $(document).ready(function(){
-	$("#slot").slot();
+
+	$("#slot").slot({eventAggregator: eventAggregator});
 
   $("#spin").on("click", function(event){
     $("#slot").slot("testSpin");
@@ -9,7 +12,10 @@ $(document).ready(function(){
     $("#slot").slot("testWins");
   });
 
-  var space = new OuterSpace.spaceScene(document.getElementById("background"));
-  var characters = new OuterSpace.charactersScene(document.getElementById("characters"));
+  var audio = new OuterSpace.audio("audio/", eventAggregator);
+  // var space = new OuterSpace.spaceScene(document.getElementById("background"));
+  // var characters = new OuterSpace.charactersScene(document.getElementById("characters"));
+
+  eventAggregator.trigger("game:ready");
 
 });

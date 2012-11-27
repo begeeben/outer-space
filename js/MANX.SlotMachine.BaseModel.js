@@ -27,7 +27,7 @@ MANX.SlotMachine.BaseModel = function() {
 	this.root = new THREE.Object3D();
 
 	this.meshBody = null;
-	// this.meshWeapon = null;
+	// this.meshHelmet = null;
 
 	this.controls = null;
 
