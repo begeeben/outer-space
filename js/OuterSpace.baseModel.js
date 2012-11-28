@@ -66,10 +66,10 @@ OuterSpace.baseModel = function() {
     this.loadCounter = config.textures.length + 1;
 
     var helmetsTextures = []
-    for ( var i = 0; i < config.helmets.length; i ++ ) helmetsTextures[ i ] = config.helmets[ i ][ 1 ];
+    for(var i = 0; i < config.helmets.length; i++) helmetsTextures[i] = config.helmets[i][1];
     // SKINS
     this.texturesBody = loadTextures(config.baseUrl + "textures/", config.textures);
-    this.texturesHelmet = loadTextures( config.baseUrl + "textures/", helmetsTextures );
+    this.texturesHelmet = loadTextures(config.baseUrl + "textures/", helmetsTextures);
     // BODY
     var loader = new THREE.JSONLoader();
 
@@ -91,28 +91,28 @@ OuterSpace.baseModel = function() {
     });
 
     // helmets
-    var generateCallback = function ( index, name ) {
-     return function( geo ) {
-       var mesh = createPart( geo, scope.texturesHelmet[ index ] );
-       mesh.scale.set( scope.scale, scope.scale, scope.scale );
-       mesh.visible = false;
-       mesh.name = name;
-       scope.root.add( mesh );
-       scope.helmets[ index ] = mesh;
-       scope.meshHelmet = mesh;
-       scope.meshes.push( mesh );
-       checkLoadingComplete();
-     }
-    }
-    for ( var i = 0; i < config.helmets.length; i ++ ) {
-     loader.load( config.baseUrl + config.helmets[ i ][ 0 ], generateCallback( i, config.helmets[ i ][ 0 ] ) );
+    var generateCallback = function(index, name) {
+        return function(geo) {
+          var mesh = createPart(geo, scope.texturesHelmet[index]);
+          mesh.scale.set(scope.scale, scope.scale, scope.scale);
+          mesh.visible = false;
+          mesh.name = name;
+          scope.root.add(mesh);
+          scope.helmets[index] = mesh;
+          scope.meshHelmet = mesh;
+          scope.meshes.push(mesh);
+          checkLoadingComplete();
+        }
+      }
+    for(var i = 0; i < config.helmets.length; i++) {
+      loader.load(config.baseUrl + config.helmets[i][0], generateCallback(i, config.helmets[i][0]));
     }
   };
 
   this.setPlaybackRate = function(rate) {
 
     if(this.meshBody) this.meshBody.duration = this.meshBody.baseDuration / rate;
-    if ( this.meshHelmet ) this.meshHelmet.duration = this.meshHelmet.baseDuration / rate;
+    if(this.meshHelmet) this.meshHelmet.duration = this.meshHelmet.baseDuration / rate;
   };
 
   this.setTexture = function(index) {
@@ -126,17 +126,17 @@ OuterSpace.baseModel = function() {
 
   };
 
-  this.setHelmet = function ( index ) {
-   for ( var i = 0; i < this.helmets.length; i ++ ) this.helmets[ i ].visible = false;
-   var activeWeapon = this.helmets[ index ];
-   if ( activeWeapon ) {
-     activeWeapon.visible = true;
-     this.meshHelmet = activeWeapon;
-     if ( this.activeAnimation ) {
-       activeWeapon.playAnimation( this.activeAnimation );
-       this.meshHelmet.setAnimationTime( this.activeAnimation, this.meshBody.getAnimationTime( this.activeAnimation ) );
-     }
-   }
+  this.setHelmet = function(index) {
+    for(var i = 0; i < this.helmets.length; i++) this.helmets[i].visible = false;
+    var activeWeapon = this.helmets[index];
+    if(activeWeapon) {
+      activeWeapon.visible = true;
+      this.meshHelmet = activeWeapon;
+      if(this.activeAnimation) {
+        activeWeapon.playAnimation(this.activeAnimation);
+        this.meshHelmet.setAnimationTime(this.activeAnimation, this.meshBody.getAnimationTime(this.activeAnimation));
+      }
+    }
   };
 
   this.setAnimation = function(animationName) {
@@ -155,9 +155,9 @@ OuterSpace.baseModel = function() {
 
     }
 
-    if ( this.meshHelmet ) {
-     this.meshHelmet.setAnimationWeight( animationName, 0 );
-     this.meshHelmet.playAnimation( animationName );
+    if(this.meshHelmet) {
+      this.meshHelmet.setAnimationWeight(animationName, 0);
+      this.meshHelmet.playAnimation(animationName);
     }
   };
 
@@ -193,10 +193,10 @@ OuterSpace.baseModel = function() {
 
     }
 
-    if ( this.meshHelmet ) {
-     this.meshHelmet.update( delta );
-     this.meshHelmet.setAnimationWeight( this.activeAnimation, mix );
-     this.meshHelmet.setAnimationWeight( this.oldAnimation,  1 - mix );
+    if(this.meshHelmet) {
+      this.meshHelmet.update(delta);
+      this.meshHelmet.setAnimationWeight(this.activeAnimation, mix);
+      this.meshHelmet.setAnimationWeight(this.oldAnimation, 1 - mix);
     }
   };
 
@@ -207,13 +207,21 @@ OuterSpace.baseModel = function() {
 
     var moveAnimation, idleAnimation;
 
-    if(controls.run) {
-      if(this.activeAnimation !== animations["run"]) {
-        this.setAnimation(animations["run"]);
+    if(controls.idle) {
+      if(this.activeAnimation !== animations["idle"]) {
+        this.setAnimation(animations["idle"]);
       }
-    } else if(controls.jump) {
-      if(this.activeAnimation !== animations["jump"]) {
-        this.setAnimation(animations["jump"]);
+    } else if(controls.win) {
+      if(this.activeAnimation !== animations["win"]) {
+        this.setAnimation(animations["win"]);
+      }
+    } else if(controls.spin) {
+      if(this.activeAnimation !== animations["spin"]) {
+        this.setAnimation(animations["spin"]);
+      }
+    } else if(controls.sad) {
+      if(this.activeAnimation !== animations["sad"]) {
+        this.setAnimation(animations["sad"]);
       }
     } else {
       if(this.activeAnimation !== animations["stand"]) {

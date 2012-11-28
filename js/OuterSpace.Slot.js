@@ -246,9 +246,11 @@
           // if result checked
           if (this.isResultChecked) {
             if (this.element.queue("win").length > 0) {
+              eventAggregator.trigger("slot:win");
               this.element.dequeue("win");
             }
             else {
+              eventAggregator.trigger("slot:sad");
               this.isAnimating = false;
             }
           }
@@ -340,7 +342,7 @@
             }
 
             if (!(this.reels[0].keepAnimating || this.reels[1].keepAnimating || this.reels[2].keepAnimating)) {
-              this.isAnimating = false;
+              this.isAnimating = false;              
             }
           }
           else {
@@ -352,6 +354,8 @@
             if (this.element.queue("win").length > 0) {
               this.isAnimating = true;
               this.element.dequeue("win");
+            } else {
+              eventAggregator.trigger("slot:stop");
             }
           }
         },

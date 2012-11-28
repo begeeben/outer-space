@@ -6,7 +6,7 @@ OuterSpace.spaceScene = function (container) {
   if( Detector.webgl ){
     // this.renderer = new THREE.WebGLRenderer();
     this.renderer = new THREE.WebGLRenderer({
-      antialias : true, // to get smoother output
+      antialias : false, // to get smoother output
       preserveDrawingBuffer : true  // to allow screenshot
     });
     // this.renderer.setClearColorHex( 0xBBBBBB, 1 );

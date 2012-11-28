@@ -1,12 +1,14 @@
-OuterSpace.charactersScene = function(container) {
+OuterSpace.charactersScene = function(container, eventAggregator) {
   this.container = container;
+  this.eventAggregator = eventAggregator;
+
   this.scene = new THREE.Scene();
 
   this.renderer = null;
   if(Detector.webgl) {
     // this.renderer = new THREE.WebGLRenderer();
     this.renderer = new THREE.WebGLRenderer({
-      antialias: true,
+      antialias: false,
       // to get smoother output
       preserveDrawingBuffer: true // to allow screenshot
     });
@@ -29,9 +31,18 @@ OuterSpace.charactersScene = function(container) {
   this.pig = null;
   this.stats = null;
 
-  this.objects = [];
+  this.controls = {
+      idle: true,
+      spin: false,
+      win: false,
+      sad: false
+    };
+
+  // this.objects = [];
 
   this._init();
+
+  this._bindEvents();
 };
 
 OuterSpace.charactersScene.prototype = {
@@ -65,7 +76,7 @@ OuterSpace.charactersScene.prototype = {
 
   _addObjects: function() {
     var that = this;
-    
+
     this.dog = new OuterSpace.baseModel();
     this.dog.scale = 1;
     this.dog.controls = {
@@ -100,25 +111,31 @@ OuterSpace.charactersScene.prototype = {
 
     this.boy = new OuterSpace.baseModel();
     this.boy.scale = 1;
-    this.boy.controls = {
-      run: false,
-      jump: false
-    };
+    this.boy.controls = this.controls;
     this.boy.loadParts({
       baseUrl: "js/models/boy/",
       body: "boy.js",
       textures: ["boy.png"],
-      helmets: [],
+      helmets: [
+        ["helmet.js", "helmet.png"]
+      ],
       animations: {
+        idle: "idle",
+        spin: "spin",
+        win: "win",
+        sad: "sad",
         stand: "stand"
       }
     });
 
-    this.boy.enableShadows(true);
-    this.boy.root.position.x = 60;
-    this.boy.root.position.y = -30;
-    this.boy.root.rotation.y = -2.5;
-    this.scene.add(this.boy.root);
+    this.boy.onLoadComplete = function() {
+      that.boy.enableShadows(true);
+      that.boy.root.position.x = 60;
+      that.boy.root.position.y = -30;
+      that.boy.root.rotation.y = -2.5;
+      that.scene.add(that.boy.root);
+
+    };
 
   },
 
@@ -144,6 +161,34 @@ OuterSpace.charactersScene.prototype = {
     this.stats.domElement.style.position = 'absolute';
     this.stats.domElement.style.bottom = '0px';
     document.body.appendChild(this.stats.domElement);
+  },
+
+  _bindEvents: function() {
+    var that = this;
+
+    this.eventAggregator.on("slot:spin", function() {
+      that._clearMovement();
+      that.controls.spin = true;
+    });
+    this.eventAggregator.on("slot:stop", function() {
+      that._clearMovement();
+      that.controls.idle = true;
+    });
+    this.eventAggregator.on("slot:win", function() {
+      that._clearMovement();
+      that.controls.win = true;
+    });
+    this.eventAggregator.on("slot:sad", function() {
+      that._clearMovement();
+      that.controls.sad = true;
+    });
+  },
+
+  _clearMovement: function() {
+    this.controls.idle = false;
+    this.controls.spin = false;
+    this.controls.win = false;
+    this.controls.sad = false;
   }
 
 };

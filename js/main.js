@@ -1,6 +1,8 @@
-var eventAggregator = _.extend({}, Backbone.Events);
+var eventAggregator;
 
 $(document).ready(function(){
+
+  eventAggregator = _.extend({}, Backbone.Events);
 
 	$("#slot").slot({eventAggregator: eventAggregator});
 
@@ -13,8 +15,8 @@ $(document).ready(function(){
   });
 
   var audio = new OuterSpace.audio("audio/", eventAggregator);
-  // var space = new OuterSpace.spaceScene(document.getElementById("background"));
-  var characters = new OuterSpace.charactersScene(document.getElementById("characters"));
+  var space = new OuterSpace.spaceScene(document.getElementById("background"));
+  var characters = new OuterSpace.charactersScene(document.getElementById("characters"), eventAggregator);
 
   eventAggregator.trigger("game:ready");
 
