@@ -100,7 +100,7 @@ OuterSpace.charactersScene.prototype = {
       that.dog.enableShadows(true);
 
       that.dog.root.position.x = -65;
-      that.dog.root.position.y = 12;
+      that.dog.root.position.y = 6;
       that.dog.root.position.z = 0;
 
       that.dog.root.rotation.x = 0.5;
@@ -129,6 +129,7 @@ OuterSpace.charactersScene.prototype = {
     });
 
     this.boy.onLoadComplete = function() {
+      that.boy.setHelmet(0);
       that.boy.enableShadows(true);
       that.boy.root.position.x = 60;
       that.boy.root.position.y = -30;
